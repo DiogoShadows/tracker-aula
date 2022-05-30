@@ -5,7 +5,13 @@ const rotas: RouteRecordRaw[] = [{
     path: '/',
     name: 'Tarefas',
     component: Tarefas
-}]
+},
+    {
+        path: '/projetos',
+        name: 'Projetos',
+        component: () => import('../views/Projetos.vue'),
+    }
+]
 
 const roteador = createRouter({
     history: createWebHashHistory(),
