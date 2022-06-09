@@ -1,7 +1,7 @@
 <template>
       <Formulario @aoCriarTarefa="salvarTarefa"/>
       <div class="list">
-        <Tarefa v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa"/>
+        <Tarefa v-for="tarefa in tarefas" :key="tarefa.id" :tarefa="tarefa"/>
         <Box v-if="tarefas.length === 0">
           Não tem tarefas
         </Box>
@@ -9,12 +9,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 import Formulario from '../components/Formulario.vue';
 import Tarefa from '../components/Tarefa.vue';
 import ITarefa from '../interfaces/ITarefa';
 import Box from '../components/Box.vue';
+import { ADICIONA_TAREFA } from '@/store/TipoDeMutacoes';
+import { useStore } from '@/store';
 
 export default defineComponent({
   name: 'App',
@@ -23,16 +25,20 @@ export default defineComponent({
     Tarefa,
     Box,
   },
-  data() {
-      return {
-          tarefas: [] as ITarefa[],
-      }
-  },
 
   methods: {
       salvarTarefa (tarefa: ITarefa) {
-          this.tarefas.push(tarefa);
+        this.store.commit(ADICIONA_TAREFA, tarefa)
       },
+  },
+
+  setup (){
+      const store = useStore()
+
+      return {
+          tarefas: computed(() => store.state.tarefas),
+          store
+      }
   }
 });
 </script>
