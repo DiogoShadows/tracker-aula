@@ -3,3 +3,5 @@ export const ALTERA_PROJETO = 'ALTERA_PROJETO';
 export const REMOVE_PROJETO = 'REMOVE_PROJETO';
 
 export const ADICIONA_TAREFA = 'ADICIONA_TAREFA';
+
+export const NOTIFICAR = 'NOTIFICAR';

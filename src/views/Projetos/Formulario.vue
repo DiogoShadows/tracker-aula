@@ -17,7 +17,8 @@
 <script lang="ts">
 import { computed, defineComponent } from 'vue'
 import { useStore} from '@/store'
-import { ADICIONA_PROJETO, ALTERA_PROJETO } from '@/store/TipoDeMutacoes'
+import { ADICIONA_PROJETO, ALTERA_PROJETO, NOTIFICAR } from '@/store/TipoDeMutacoes'
+import { TipoNotificacao } from '@/interfaces/INotificacao'
 
 export default defineComponent({
     name: 'Formulario',
@@ -47,7 +48,12 @@ export default defineComponent({
             else{
                 this.store.commit(ADICIONA_PROJETO, this.nomeDoProjeto)
             }
-
+            
+            this.store.commit(NOTIFICAR, {
+                titulo: "Projeto salvo com sucesso",
+                texto: "Projeto já disponível para uso",
+                tipo: TipoNotificacao.SUCESSO,
+            })
             this.nomeDoProjeto = ""
             this.$router.push("/projetos")
         }

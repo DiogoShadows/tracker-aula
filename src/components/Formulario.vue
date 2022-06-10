@@ -20,7 +20,9 @@
 </template>
 
 <script lang="ts">
-    import { key } from '@/store';
+    import { TipoNotificacao } from '@/interfaces/INotificacao';
+import { key } from '@/store';
+import { NOTIFICAR } from '@/store/TipoDeMutacoes';
     import { computed, defineComponent } from 'vue';
     import { useStore } from 'vuex';
     import Temporizador from './Temporizador.vue';
@@ -39,17 +41,31 @@
         },
         methods: {
             finalizarTarefa(tempoEmSegundos: number): void{
+                var projeto = this.projetos.find(x => x.id === this.idProjeto)
+                if(projeto == null){
+                    this.store.commit(NOTIFICAR, {
+                        titulo: "Erro ao salvar a tarefa",
+                        texto: "Selecione um projeto",
+                        tipo: TipoNotificacao.FALHA,
+                    })
+                }
+
+                else{
                 this.$emit("aoCriarTarefa", {
                     descricao: this.descricao,
                     duracaoEmSegundos: tempoEmSegundos,
                     projeto: this.projetos.find(x => x.id == this.idProjeto)
                 });
+                }
+
                 this.descricao = '';
             },
         },
         setup() {
             const store = useStore(key)
+
             return {
+                store,
                 projetos: computed(() => store.state.projetos),
             }
         }
