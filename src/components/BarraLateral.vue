@@ -57,7 +57,7 @@ export default defineComponent({
 <style scoped>
     header{
         padding: 1rem;
-        background-color: rgb(60, 60, 243);
+        background-color: rgb(147, 147, 201);
         width: 100%;
         height: 100vh;
         text-align: center;
