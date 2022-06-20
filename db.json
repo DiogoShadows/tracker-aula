@@ -5,8 +5,12 @@
       "nome": "alura Tracker 2"
     },
     {
-      "nome": "test",
-      "id": 3
+      "id": 3,
+      "nome": "vue3"
+    },
+    {
+      "nome": "vue 23",
+      "id": 4
     }
   ],
   "tarefas": [
@@ -45,6 +49,15 @@
         "nome": "alura Tracker 2"
       },
       "id": "2022-06-17T18:43:15.807Z"
+    },
+    {
+      "descricao": "estudando vue",
+      "duracaoEmSegundos": 2,
+      "projeto": {
+        "nome": "vue 23",
+        "id": 4
+      },
+      "id": "2022-06-20T16:18:42.216Z"
     }
   ]
 }
