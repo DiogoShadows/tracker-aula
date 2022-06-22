@@ -1,6 +1,14 @@
 <template>
   <Formulario @aoCriarTarefa="salvarTarefa" />
   <div class="list">
+    <div class="field">
+      <p class="control has-icons-left has-icons-right">
+        <input class="input" type="text" placeholder="Digite para filtrar" v-model="filtro"/>
+        <span class="icon is-small is-left">
+          <i class="fas fa-search"></i>
+        </span>
+      </p>
+    </div>
     <Tarefa
       v-for="tarefa in tarefas"
       :key="tarefa.id"
@@ -10,7 +18,11 @@
     <Box v-if="tarefas?.length === 0">
       Não tem tarefas
     </Box>
-    <div class="modal" :class="{ 'is-active': tarefaSelecionada }" v-if="tarefaSelecionada">
+    <div
+      class="modal"
+      :class="{ 'is-active': tarefaSelecionada }"
+      v-if="tarefaSelecionada"
+    >
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
@@ -22,7 +34,9 @@
           ></button>
         </header>
         <section class="modal-card-body">
-          <label for="descricaoDaTarefa" class="label">Descrição da tarefa</label>
+          <label for="descricaoDaTarefa" class="label"
+            >Descrição da tarefa</label
+          >
           <input
             type="text"
             class="input"
@@ -31,7 +45,9 @@
           />
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success" @click="atualizarTarefa">Salvar alterações</button>
+          <button class="button is-success" @click="atualizarTarefa">
+            Salvar alterações
+          </button>
           <button @click="fecharModal" class="button">Cancelar</button>
         </footer>
       </div>
@@ -40,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, ref, watchEffect } from "vue";
 
 import Formulario from "../components/Formulario.vue";
 import Tarefa from "../components/Tarefa.vue";
@@ -89,9 +105,21 @@ export default defineComponent({
     store.dispatch(OBTER_PROJETOS);
     store.dispatch(OBTER_TAREFAS);
 
+    const filtro = ref("");
+    // const tarefas = computed(() =>
+    //   store.state.tarefa.tarefas?.filter(
+    //     (x) => !filtro.value || x.descricao.includes(filtro.value)
+    //   )
+    // );
+
+    watchEffect(() => {
+      store.dispatch(OBTER_TAREFAS, filtro.value)
+    })
+
     return {
       tarefas: computed(() => store.state.tarefa.tarefas),
       store,
+      filtro,
     };
   },
 });
