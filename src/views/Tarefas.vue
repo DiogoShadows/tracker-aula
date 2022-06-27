@@ -3,7 +3,12 @@
   <div class="list">
     <div class="field">
       <p class="control has-icons-left has-icons-right">
-        <input class="input" type="text" placeholder="Digite para filtrar" v-model="filtro"/>
+        <input
+          class="input"
+          type="text"
+          placeholder="Digite para filtrar"
+          v-model="filtro"
+        />
         <span class="icon is-small is-left">
           <i class="fas fa-search"></i>
         </span>
@@ -15,43 +20,30 @@
       :tarefa="tarefa"
       @aoTarefaClicada="selecionarTarefa"
     />
+    <Modal :mostrar="tarefaSelecionada != null">
+      <template v-slot:cabecalho>
+        <p class="modal-card-title">Editando tarefa</p>
+        <button class="delete" @click="fecharModal" aria-label="close"></button>
+      </template>
+      <template v-slot:corpo>
+        <label for="descricaoDaTarefa" class="label">Descrição da tarefa</label>
+        <input
+          type="text"
+          class="input"
+          v-model="tarefaSelecionada.descricao"
+          id="descricaoDaTarefa"
+        />
+      </template>
+      <template v-slot:rodape>
+        <button class="button is-success" @click="atualizarTarefa">
+          Salvar alterações
+        </button>
+        <button @click="fecharModal" class="button">Cancelar</button>
+      </template>
+    </Modal>
     <Box v-if="tarefas?.length === 0">
       Não tem tarefas
     </Box>
-    <div
-      class="modal"
-      :class="{ 'is-active': tarefaSelecionada }"
-      v-if="tarefaSelecionada"
-    >
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Editando tarefa</p>
-          <button
-            class="delete"
-            @click="fecharModal"
-            aria-label="close"
-          ></button>
-        </header>
-        <section class="modal-card-body">
-          <label for="descricaoDaTarefa" class="label"
-            >Descrição da tarefa</label
-          >
-          <input
-            type="text"
-            class="input"
-            v-model="tarefaSelecionada.descricao"
-            id="descricaoDaTarefa"
-          />
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-success" @click="atualizarTarefa">
-            Salvar alterações
-          </button>
-          <button @click="fecharModal" class="button">Cancelar</button>
-        </footer>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -62,6 +54,8 @@ import Formulario from "../components/Formulario.vue";
 import Tarefa from "../components/Tarefa.vue";
 import ITarefa from "../interfaces/ITarefa";
 import Box from "../components/Box.vue";
+import Modal from "../components/Modal.vue";
+
 import { useStore } from "@/store";
 import {
   ALTERAR_TAREFA,
@@ -76,6 +70,7 @@ export default defineComponent({
     Formulario,
     Tarefa,
     Box,
+    Modal,
   },
   data() {
     return {
@@ -113,8 +108,8 @@ export default defineComponent({
     // );
 
     watchEffect(() => {
-      store.dispatch(OBTER_TAREFAS, filtro.value)
-    })
+      store.dispatch(OBTER_TAREFAS, filtro.value);
+    });
 
     return {
       tarefas: computed(() => store.state.tarefa.tarefas),
